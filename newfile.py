@@ -3,7 +3,7 @@ import getpass
 import time
 import sys
 from colorama import init, Fore, Style
-import pygame
+from moviepy.editor import VideoFileClip
 
 # Initialize colorama
 init(autoreset=True)
@@ -42,34 +42,38 @@ def login():
     clear()
     expected_user = ""  # Expected empty username
     expected_passwd = ""  # Expected empty password
-    
+
     print_normal_centered("YOU ARE CALLING DEATH")
     print()  # Print a blank line for spacing
     username = input(Fore.BLUE + "WHO WAS FAN OF L: " + Fore.RESET)
-    
+
     clear()  # Clear the screen after the first prompt
-    
+
     print_normal_centered("YOU ARE CALLING DEATH")
     print()  # Print a blank line for spacing
     password = getpass.getpass(prompt=Fore.BLUE + 'WHO WAS FAN OF LIGHT: ' + Fore.RESET)
-    
+
     if username != expected_user or password != expected_passwd:
         print(Fore.RED + "\nPassword/Username incorrect" + Fore.RESET)
         sys.exit(1)
     else:
         print(Fore.GREEN + "\nLogin successful" + Fore.RESET)
         time.sleep(0.3)
-        ascii_art_animation()  # Display ASCII art animation
+        ascii_art_animation()  # Display ASCII art animation after successful login
         time.sleep(0.3)
+        video_clip = VideoFileClip("st.mp4")
+        try:
+            import pygame
+            pygame.init()
+            pygame.display.set_caption("Death Note")
+            screen = pygame.display.set_mode((video_clip.size[0], video_clip.size[1]))
+            video_clip.preview()
+            video_clip.close()
+            pygame.quit()  # Close pygame after video preview
+        except ImportError:
+            print(Fore.RED + "Pygame is not installed. Please install it using 'pip install pygame'." + Fore.RESET)
+            sys.exit(1)
 
-# Function to play video with sound
-def play_video(video_path):
-    pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.music.load(video_path)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
 
 # Function for writing a note with blue color, animation, and centered text
 def write_note():
@@ -137,15 +141,7 @@ def main():
             sys.exit(0)
 
 # Entry point of the program
-# Entry point of the program
 if __name__ == "__main__":
     ascii_art_animation()  # Display ASCII art animation
     login()
-    
-    # Path to your .mp4 file
-    video_path = "/st.mp4/"
-    
-    # Play video with sound after successful login and ASCII art animation
-    play_video(video_path)
-    
     main()
