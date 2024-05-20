@@ -143,7 +143,7 @@ if __name__ == "__main__":
     login()
     
     # Path to your .mp4 file
-    video_path = "/st.mp4/"
+    video_path = "st.mp4"
     
     # Play video with sound after successful login and ASCII art animation
     play_video(video_path)
